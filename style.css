@@ -1,0 +1,15 @@
+* {
+    font-family: "Inter", sans-serif;
+}
+.banner-section {
+    background: 
+        linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("./assets/hero-leaf1.png"),
+        url("./assets/hero-leaf2.png"),
+        #CFF0DC;
+
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-position: center, left center, right center;
+
+    height: 40vh;
+}
