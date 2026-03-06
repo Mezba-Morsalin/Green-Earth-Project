@@ -13,3 +13,9 @@
 
     height: 40vh;
 }
+.custom-btn {
+    background-color: #15803d;
+    color: #ffffff;
+    border: none;
+    outline: none;
+}
