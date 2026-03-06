@@ -2,6 +2,7 @@
 const loadingSpinner = document.getElementById("loading-spinner");
 const treesContainer = document.getElementById("trees-container");
 const allTreesBtn = document.getElementById("all-trees-btn");
+const treeShowing = document.getElementById("trees_showing");
 
 // Show all category buttons
 const allBtnShow = () => {
@@ -34,14 +35,14 @@ const selectCategory = (categoryId, btn) => {
 
     const allBtns = document.querySelectorAll("#btn-container button");
     allBtns.forEach(element => {
-        element.classList.remove("custom-btn");
+        element.classList.remove("btn-success");
         element.classList.add("btn-outline");
     });
 
-    btn.classList.add("custom-btn");
+    btn.classList.add("btn-success");
     btn.classList.remove("btn-outline");
 
-    allTreesBtn.classList.remove("custom-btn");
+    allTreesBtn.classList.remove("btn-success");
     allTreesBtn.classList.add("btn-outline");
 
     fetch(`https://openapi.programming-hero.com/api/category/${categoryId}`)
@@ -61,13 +62,13 @@ const selectCategory = (categoryId, btn) => {
 
 allTreesBtn.addEventListener("click", () => {
     showLoading();
-    const allBtns = document.querySelectorAll("#btn-container button");
+    const allBtns = document.querySelectorAll("#btn-container button, #all-trees-btn");
     allBtns.forEach(btn => {
-        btn.classList.remove("custom-btn");
+        btn.classList.remove("btn-success");
         btn.classList.add("btn-outline");
     });
 
-    allTreesBtn.classList.add("custom-btn");
+    allTreesBtn.classList.add("btn-success");
     allTreesBtn.classList.remove("btn-outline");
     allTrees();
 });
@@ -89,16 +90,17 @@ const allTrees = () => {
     });
 }
 
-// Display trees 
+// Display trees
 const displayTrees = (trees) => {
     treesContainer.innerHTML = "";
 
     trees.forEach(element => {
         const div = document.createElement("div");
+
         div.innerHTML = `
         <div class="space-y-4 bg-white p-4 rounded-2xl">
-            <img class="rounded-2xl" src="${element.image}" alt="${element.name}">
-            <h3 class="text-xl font-semibold">${element.name}</h3>
+            <img onclick='treeModal(${element.id})' class="rounded-2xl h-80 w-full object-cover" src="${element.image}" alt="${element.name}">
+            <h3 class="text-xl font-semibold cursor-pointer">${element.name}</h3>
             <p class="line-clamp-3">${element.description}</p>
 
             <div class="flex justify-between">
@@ -108,15 +110,34 @@ const displayTrees = (trees) => {
                 <h3 class="font-semibold">৳${element.price}</h3>
             </div>
 
-            <button class="btn bg-[#15803d] text-white w-full rounded-full">
+            <button class="btn btn-success text-white w-full rounded-full">
                 Add to Cart
             </button>
         </div>
         `;
+
         treesContainer.append(div);
     });
 }
 
+// Tree Modal
+const treeModal = (treeID) => {
+    fetch(`https://openapi.programming-hero.com/api/plant/${treeID}`)
+    .then(response => response.json())
+    .then(data => {
+
+        const tree = data.plants;
+
+        document.getElementById("modal-title").innerText = tree.name;
+        document.getElementById("modal-img").src = tree.image;
+        document.getElementById("modal-category").innerText = tree.category;
+        document.getElementById("modal-desc").innerText = tree.description;
+        document.getElementById("modal-price").innerText = "৳" + tree.price;
+
+        treeShowing.showModal();
+
+    });
+}
 // Spinner functions
 const showLoading = () => {
     loadingSpinner.classList.remove("hidden");
@@ -130,3 +151,5 @@ const hideLoading = () => {
 // Initial call the functions
 allBtnShow();
 allTrees();
+
+// {/* <dialog id="my_modal_1" class="modal"></dialog> */}
